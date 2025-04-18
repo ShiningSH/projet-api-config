@@ -1,10 +1,10 @@
+import express from 'express';
+import { check } from 'express-validator';
+import * as merchantController from '../controllers/merchantController.js';
+import auth from '../middleware/auth.js';
+import roleCheck from '../middleware/roleCheck.js';
 
-const express = require('express');
-const { check } = require('express-validator');
 const router = express.Router();
-const merchantController = require('../controllers/merchantController');
-const auth = require('../middleware/auth');
-const roleCheck = require('../middleware/roleCheck');
 
 /**
  * @swagger
@@ -157,4 +157,4 @@ router.delete('/:id', [
   roleCheck(['admin'])
 ], merchantController.deleteMerchant);
 
-module.exports = router;
+export default router;

@@ -1,5 +1,4 @@
-
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const componentSchema = new mongoose.Schema({
   categoryId: {
@@ -40,4 +39,6 @@ const componentSchema = new mongoose.Schema({
   timestamps: true
 });
 
-module.exports = mongoose.model('Component', componentSchema);
+const Component = mongoose.model('Component', componentSchema);
+
+export default Component;

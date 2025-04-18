@@ -1,9 +1,9 @@
+import express from 'express';
+import { check } from 'express-validator';
+import authController from '../controllers/authController.js';  // Assurez-vous d'utiliser la syntaxe ES6
+import auth from '../middleware/auth.js';
 
-const express = require('express');
-const { check } = require('express-validator');
 const router = express.Router();
-const authController = require('../controllers/authController');
-const auth = require('../middleware/auth');
 
 /**
  * @swagger
@@ -87,4 +87,4 @@ router.post('/login', [
  */
 router.get('/me', auth, authController.getMe);
 
-module.exports = router;
+export default router;  // Changement ici : exportation par défaut en ES6

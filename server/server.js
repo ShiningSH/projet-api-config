@@ -11,6 +11,9 @@ import merchantsRoutes from './routes/merchants.js';
 import merchantPricesRoutes from './routes/merchantPrices.js';
 import configurationsRoutes from './routes/configurations.js';
 import usersRoutes from './routes/users.js';
+import authMiddleware from './middleware/auth.js';
+
+
 
 dotenv.config();
 
@@ -23,24 +26,24 @@ const swaggerOptions = {
     info: {
       title: 'PC Configurator API',
       version: '1.0.0',
-      description: 'API for PC component configuration'
+      description: 'API for PC component configuration',
     },
     servers: [
       {
-        url: `http://localhost:${process.env.PORT || 5000}`
-      }
+        url: `http://localhost:${process.env.PORT || 5000}`,
+      },
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
           type: 'http',
           scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
-      }
-    }
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
-  apis: ['./server/routes/*.js']
+  apis: ['./routes/*.js'],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -71,6 +74,7 @@ app.listen(PORT, () => {
 });
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI)
+mongoose
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => console.error('❌ Could not connect to MongoDB:', err));
+  .catch((err) => console.error('❌ Could not connect to MongoDB:', err));

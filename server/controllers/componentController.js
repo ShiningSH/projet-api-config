@@ -1,8 +1,7 @@
+import Component from '../models/Component.js';
+import { validationResult } from 'express-validator';
 
-const Component = require('../models/Component');
-const { validationResult } = require('express-validator');
-
-exports.getAllComponents = async (req, res) => {
+export const getAllComponents = async (req, res) => {
   try {
     const components = await Component.find().populate('categoryId');
     res.json(components);
@@ -11,7 +10,7 @@ exports.getAllComponents = async (req, res) => {
   }
 };
 
-exports.getComponent = async (req, res) => {
+export const getComponent = async (req, res) => {
   try {
     const component = await Component.findById(req.params.id).populate('categoryId');
     if (!component) {
@@ -23,7 +22,7 @@ exports.getComponent = async (req, res) => {
   }
 };
 
-exports.createComponent = async (req, res) => {
+export const createComponent = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -38,7 +37,7 @@ exports.createComponent = async (req, res) => {
   }
 };
 
-exports.updateComponent = async (req, res) => {
+export const updateComponent = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -50,16 +49,18 @@ exports.updateComponent = async (req, res) => {
       req.body,
       { new: true }
     );
+
     if (!component) {
       return res.status(404).json({ message: 'Composant non trouvé' });
     }
+
     res.json(component);
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 };
 
-exports.deleteComponent = async (req, res) => {
+export const deleteComponent = async (req, res) => {
   try {
     const component = await Component.findByIdAndDelete(req.params.id);
     if (!component) {

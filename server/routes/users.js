@@ -1,10 +1,10 @@
+import express from 'express';
+import { check } from 'express-validator';
+import * as userController from '../controllers/userController.js'; // Import avec * pour tous les contrôleurs
+import auth from '../middleware/auth';
+import roleCheck from '../middleware/roleCheck';
 
-const express = require('express');
-const { check } = require('express-validator');
 const router = express.Router();
-const userController = require('../controllers/userController');
-const auth = require('../middleware/auth');
-const roleCheck = require('../middleware/roleCheck');
 
 /**
  * @swagger
@@ -138,4 +138,4 @@ router.put('/:id', [
  */
 router.delete('/:id', auth, userController.deleteUser);
 
-module.exports = router;
+export default router;

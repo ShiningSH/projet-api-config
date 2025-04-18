@@ -1,9 +1,9 @@
+import express from 'express';
+import { check } from 'express-validator';
+import * as configurationController from '../controllers/configurationController.js';
+import auth from '../middleware/auth.js';
 
-const express = require('express');
-const { check } = require('express-validator');
 const router = express.Router();
-const configurationController = require('../controllers/configurationController');
-const auth = require('../middleware/auth');
 
 /**
  * @swagger
@@ -155,4 +155,4 @@ router.put('/:id', [
  */
 router.delete('/:id', auth, configurationController.deleteConfiguration);
 
-module.exports = router;
+export default router;
