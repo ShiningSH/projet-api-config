@@ -8,7 +8,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/merchant-prices:
+ * /api/merchantPrices:
  *   get:
  *     tags: [MerchantPrices]
  *     description: Get all merchant prices
@@ -31,7 +31,7 @@ router.get('/', merchantPriceController.getAllMerchantPrices);
 
 /**
  * @swagger
- * /api/merchant-prices/{id}:
+ * /api/merchantPrices/{id}:
  *   get:
  *     tags: [MerchantPrices]
  *     description: Get merchant price by ID
@@ -51,7 +51,7 @@ router.get('/:id', merchantPriceController.getMerchantPrice);
 
 /**
  * @swagger
- * /api/merchant-prices:
+ * /api/merchantPrices:
  *   post:
  *     tags: [MerchantPrices]
  *     description: Create a new merchant price
@@ -100,7 +100,7 @@ router.post('/', [
 
 /**
  * @swagger
- * /api/merchant-prices/{id}:
+ * /api/merchantPrices/{id}:
  *   put:
  *     tags: [MerchantPrices]
  *     description: Update a merchant price
@@ -146,7 +146,7 @@ router.put('/:id', [
 
 /**
  * @swagger
- * /api/merchant-prices/{id}:
+ * /api/merchantPrices/{id}:
  *   delete:
  *     tags: [MerchantPrices]
  *     description: Delete a merchant price

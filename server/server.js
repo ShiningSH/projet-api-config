@@ -4,6 +4,10 @@ import cors from 'cors';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import dotenv from 'dotenv';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
 import authRoutes from './routes/auth.js';
 import componentsRoutes from './routes/components.js';
 import categoriesRoutes from './routes/categories.js';
@@ -13,6 +17,9 @@ import configurationsRoutes from './routes/configurations.js';
 import usersRoutes from './routes/users.js';
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -40,10 +47,14 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ['./routes/*.js'],
+  apis: ['./routes/*.js'], // tous les fichiers Swagger dans /routes
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
+// 🔍 Dump du JSON généré par Swagger pour debug
+fs.writeFileSync('./swagger-output.json', JSON.stringify(swaggerDocs, null, 2));
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Middleware
@@ -59,7 +70,13 @@ app.use('/api/merchantPrices', merchantPricesRoutes);
 app.use('/api/configurations', configurationsRoutes);
 app.use('/api/users', usersRoutes);
 
-// Connect to MongoDB
+// Static files (React build)
+app.use(express.static(path.join(__dirname, '../dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
+});
+
+// MongoDB connection
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
@@ -72,7 +89,7 @@ mongoose
     console.log('Error connecting to MongoDB:', err);
   });
 
-// Error handling middleware
+// Error handling
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Erreur serveur' });

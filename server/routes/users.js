@@ -11,7 +11,7 @@ const router = express.Router();
  * /api/users:
  *   get:
  *     tags: [Users]
- *     description: Get all users (admin only)
+ *     summary: Get all users (admin only)
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -29,7 +29,7 @@ router.get('/', [auth, roleCheck(['admin'])], userController.getAllUsers);
  * /api/users/me:
  *   get:
  *     tags: [Users]
- *     description: Get current user
+ *     summary: Get current user
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -38,14 +38,14 @@ router.get('/', [auth, roleCheck(['admin'])], userController.getAllUsers);
  *       401:
  *         description: Not authenticated
  */
-router.get('/me', auth, userController.getCurrentUser);  // Assurez-vous que la fonction 'getCurrentUser' est définie dans le contrôleur
+router.get('/me', auth, userController.getCurrentUser);
 
 /**
  * @swagger
  * /api/users/{id}:
  *   get:
  *     tags: [Users]
- *     description: Get user by ID (admin or self)
+ *     summary: Get user by ID (admin or self)
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -71,7 +71,7 @@ router.get('/:id', auth, userController.getUser);
  * /api/users/{id}:
  *   put:
  *     tags: [Users]
- *     description: Update a user (admin or self)
+ *     summary: Update a user (admin or self)
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -117,7 +117,7 @@ router.put('/:id', [
  * /api/users/{id}:
  *   delete:
  *     tags: [Users]
- *     description: Delete a user (admin or self)
+ *     summary: Delete a user (admin or self)
  *     security:
  *       - bearerAuth: []
  *     parameters:
