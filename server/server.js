@@ -7,15 +7,15 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+
 import testRoutes from './routes/test.js';
-// 🚫 autres routes temporairement désactivées
-// import authRoutes from './routes/auth.js';
-// import componentsRoutes from './routes/components.js';
-// import categoriesRoutes from './routes/categories.js';
-// import merchantsRoutes from './routes/merchants.js';
-// import merchantPricesRoutes from './routes/merchantPrices.js';
-// import configurationsRoutes from './routes/configurations.js';
-// import usersRoutes from './routes/users.js';
+import authRoutes from './routes/auth.js';
+import componentsRoutes from './routes/components.js';
+import categoriesRoutes from './routes/categories.js';
+import merchantsRoutes from './routes/merchants.js';
+import merchantPricesRoutes from './routes/merchantPrices.js';
+import configurationsRoutes from './routes/configurations.js';
+import usersRoutes from './routes/users.js';
 
 dotenv.config();
 
@@ -24,7 +24,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-// Swagger configuration
+// Swagger
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
@@ -48,42 +48,42 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ['./routes/test.js'],
+  apis: ['./routes/*.js'],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 fs.writeFileSync('./swagger-output.json', JSON.stringify(swaggerDocs, null, 2));
-
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// ✅ Test route uniquement
+// ✅ All API routes
 app.use('/api/test', testRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/components', componentsRoutes);
+app.use('/api/categories', categoriesRoutes);
+app.use('/api/merchants', merchantsRoutes);
+app.use('/api/merchantPrices', merchantPricesRoutes);
+app.use('/api/configurations', configurationsRoutes);
+app.use('/api/users', usersRoutes);
 
-// Static frontend (si présent)
+// Static frontend (Vite build)
 app.use(express.static(path.join(__dirname, '../dist')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-// MongoDB connection
+// DB + Start
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log('MongoDB connected');
+    console.log('✅ MongoDB connected');
     app.listen(process.env.PORT || 5000, () => {
-      console.log(`Server is running on port ${process.env.PORT || 5000}`);
+      console.log(`🚀 Server is running on port ${process.env.PORT || 5000}`);
     });
   })
   .catch((err) => {
-    console.log('Error connecting to MongoDB:', err);
+    console.error('❌ MongoDB connection failed:', err);
   });
-
-// Error handling
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Erreur serveur' });
-});
