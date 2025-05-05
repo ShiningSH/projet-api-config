@@ -27,6 +27,7 @@ const router = express.Router();
  *       200:
  *         description: A list of merchant prices
  */
+
 router.get('/', merchantPriceController.getAllMerchantPrices);
 
 /**

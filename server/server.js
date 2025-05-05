@@ -7,14 +7,15 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-
-import authRoutes from './routes/auth.js';
-import componentsRoutes from './routes/components.js';
-import categoriesRoutes from './routes/categories.js';
-import merchantsRoutes from './routes/merchants.js';
-import merchantPricesRoutes from './routes/merchantPrices.js';
-import configurationsRoutes from './routes/configurations.js';
-import usersRoutes from './routes/users.js';
+import testRoutes from './routes/test.js';
+// 🚫 autres routes temporairement désactivées
+// import authRoutes from './routes/auth.js';
+// import componentsRoutes from './routes/components.js';
+// import categoriesRoutes from './routes/categories.js';
+// import merchantsRoutes from './routes/merchants.js';
+// import merchantPricesRoutes from './routes/merchantPrices.js';
+// import configurationsRoutes from './routes/configurations.js';
+// import usersRoutes from './routes/users.js';
 
 dotenv.config();
 
@@ -47,12 +48,10 @@ const swaggerOptions = {
       },
     },
   },
-  apis: ['./routes/*.js'], // tous les fichiers Swagger dans /routes
+  apis: ['./routes/test.js'],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
-// 🔍 Dump du JSON généré par Swagger pour debug
 fs.writeFileSync('./swagger-output.json', JSON.stringify(swaggerDocs, null, 2));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
@@ -61,16 +60,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/components', componentsRoutes);
-app.use('/api/categories', categoriesRoutes);
-app.use('/api/merchants', merchantsRoutes);
-app.use('/api/merchantPrices', merchantPricesRoutes);
-app.use('/api/configurations', configurationsRoutes);
-app.use('/api/users', usersRoutes);
+// ✅ Test route uniquement
+app.use('/api/test', testRoutes);
 
-// Static files (React build)
+// Static frontend (si présent)
 app.use(express.static(path.join(__dirname, '../dist')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
