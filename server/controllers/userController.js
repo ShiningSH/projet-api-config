@@ -1,6 +1,19 @@
 import User from '../models/User.js';
 import { validationResult } from 'express-validator';
 
+export const getCurrentUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
 export const getAllUsers = async (req, res) => {
   try {
     // Récupérer tous les utilisateurs sans le mot de passe
