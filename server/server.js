@@ -11,9 +11,6 @@ import merchantsRoutes from './routes/merchants.js';
 import merchantPricesRoutes from './routes/merchantPrices.js';
 import configurationsRoutes from './routes/configurations.js';
 import usersRoutes from './routes/users.js';
-import authMiddleware from './middleware/auth.js';
-
-
 
 dotenv.config();
 
@@ -58,23 +55,25 @@ app.use('/api/auth', authRoutes);
 app.use('/api/components', componentsRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/merchants', merchantsRoutes);
-app.use('/api/merchant-prices', merchantPricesRoutes);
+app.use('/api/merchantPrices', merchantPricesRoutes);
 app.use('/api/configurations', configurationsRoutes);
 app.use('/api/users', usersRoutes);
+
+// Connect to MongoDB
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('MongoDB connected');
+    app.listen(process.env.PORT || 5000, () => {
+      console.log(`Server is running on port ${process.env.PORT || 5000}`);
+    });
+  })
+  .catch((err) => {
+    console.log('Error connecting to MongoDB:', err);
+  });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: 'Something went wrong!' });
+  res.status(500).json({ message: 'Erreur serveur' });
 });
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`✅ Server is running on port ${PORT}`);
-});
-
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => console.log('✅ Connected to MongoDB'))
-  .catch((err) => console.error('❌ Could not connect to MongoDB:', err));

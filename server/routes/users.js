@@ -1,8 +1,8 @@
 import express from 'express';
 import { check } from 'express-validator';
-import * as userController from '../controllers/userController.js'; // Import avec * pour tous les contrôleurs
-import auth from '../middleware/auth';
-import roleCheck from '../middleware/roleCheck';
+import * as userController from '../controllers/userController.js';
+import roleCheck from '../middleware/roleCheck.js';
+import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -38,7 +38,7 @@ router.get('/', [auth, roleCheck(['admin'])], userController.getAllUsers);
  *       401:
  *         description: Not authenticated
  */
-router.get('/me', auth, userController.getCurrentUser);
+router.get('/me', auth, userController.getCurrentUser);  // Assurez-vous que la fonction 'getCurrentUser' est définie dans le contrôleur
 
 /**
  * @swagger

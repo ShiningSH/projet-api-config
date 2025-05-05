@@ -1,8 +1,7 @@
+import Category from '../models/Category.js';
+import { validationResult } from 'express-validator';
 
-const Category = require('../models/Category');
-const { validationResult } = require('express-validator');
-
-exports.getAllCategories = async (req, res) => {
+export const getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find();
     res.json(categories);
@@ -11,7 +10,7 @@ exports.getAllCategories = async (req, res) => {
   }
 };
 
-exports.getCategory = async (req, res) => {
+export const getCategory = async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
     if (!category) {
@@ -23,7 +22,7 @@ exports.getCategory = async (req, res) => {
   }
 };
 
-exports.createCategory = async (req, res) => {
+export const createCategory = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -41,7 +40,7 @@ exports.createCategory = async (req, res) => {
   }
 };
 
-exports.updateCategory = async (req, res) => {
+export const updateCategory = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -65,7 +64,7 @@ exports.updateCategory = async (req, res) => {
   }
 };
 
-exports.deleteCategory = async (req, res) => {
+export const deleteCategory = async (req, res) => {
   try {
     const category = await Category.findByIdAndDelete(req.params.id);
     if (!category) {

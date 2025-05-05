@@ -1,5 +1,6 @@
+// models/Merchant.js
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const merchantSchema = new mongoose.Schema({
   name: {
@@ -19,4 +20,5 @@ const merchantSchema = new mongoose.Schema({
   timestamps: true
 });
 
-module.exports = mongoose.model('Merchant', merchantSchema);
+// Exportation par défaut de notre modèle
+export default mongoose.model('Merchant', merchantSchema);

@@ -1,8 +1,9 @@
+// controllers/merchantController.js
 
-const Merchant = require('../models/Merchant');
-const { validationResult } = require('express-validator');
+import Merchant from '../models/Merchant.js';
+import { validationResult } from 'express-validator';
 
-exports.getAllMerchants = async (req, res) => {
+export const getAllMerchants = async (req, res) => {
   try {
     const merchants = await Merchant.find();
     res.json(merchants);
@@ -11,7 +12,7 @@ exports.getAllMerchants = async (req, res) => {
   }
 };
 
-exports.getMerchant = async (req, res) => {
+export const getMerchant = async (req, res) => {
   try {
     const merchant = await Merchant.findById(req.params.id);
     if (!merchant) {
@@ -23,7 +24,7 @@ exports.getMerchant = async (req, res) => {
   }
 };
 
-exports.createMerchant = async (req, res) => {
+export const createMerchant = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -41,7 +42,7 @@ exports.createMerchant = async (req, res) => {
   }
 };
 
-exports.updateMerchant = async (req, res) => {
+export const updateMerchant = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -65,7 +66,7 @@ exports.updateMerchant = async (req, res) => {
   }
 };
 
-exports.deleteMerchant = async (req, res) => {
+export const deleteMerchant = async (req, res) => {
   try {
     const merchant = await Merchant.findByIdAndDelete(req.params.id);
     if (!merchant) {

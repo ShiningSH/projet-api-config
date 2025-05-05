@@ -1,9 +1,8 @@
+import Configuration from '../models/Configuration.js';
+import Component from '../models/Component.js';
+import { validationResult } from 'express-validator';
 
-const Configuration = require('../models/Configuration');
-const Component = require('../models/Component');
-const { validationResult } = require('express-validator');
-
-exports.getAllConfigurations = async (req, res) => {
+export const getAllConfigurations = async (req, res) => {
   try {
     // If user is not admin, only return their configurations
     const query = req.user.role === 'admin' ? {} : { userId: req.user.userId };
@@ -18,7 +17,7 @@ exports.getAllConfigurations = async (req, res) => {
   }
 };
 
-exports.getConfiguration = async (req, res) => {
+export const getConfiguration = async (req, res) => {
   try {
     const configuration = await Configuration.findById(req.params.id)
       .populate('userId', 'username email')
@@ -39,7 +38,7 @@ exports.getConfiguration = async (req, res) => {
   }
 };
 
-exports.createConfiguration = async (req, res) => {
+export const createConfiguration = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -80,7 +79,7 @@ exports.createConfiguration = async (req, res) => {
   }
 };
 
-exports.updateConfiguration = async (req, res) => {
+export const updateConfiguration = async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -127,7 +126,7 @@ exports.updateConfiguration = async (req, res) => {
   }
 };
 
-exports.deleteConfiguration = async (req, res) => {
+export const deleteConfiguration = async (req, res) => {
   try {
     const configuration = await Configuration.findById(req.params.id);
     

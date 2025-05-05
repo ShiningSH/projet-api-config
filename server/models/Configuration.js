@@ -1,5 +1,4 @@
-
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const configurationSchema = new mongoose.Schema({
   userId: {
@@ -23,4 +22,6 @@ const configurationSchema = new mongoose.Schema({
   timestamps: true
 });
 
-module.exports = mongoose.model('Configuration', configurationSchema);
+const Configuration = mongoose.model('Configuration', configurationSchema);
+
+export default Configuration;  // Utilisation de l'export par défaut
