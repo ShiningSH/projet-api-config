@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { components, categories } from "@/data/mockData";
@@ -12,22 +11,22 @@ import { Component } from "@/types";
 
 const Components = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedBrand, setSelectedBrand] = useState("all");
 
-  // Get unique brands
-  const brands = Array.from(new Set(components.map(component => component.brand)));
+  const brands = Array.from(
+    new Set(components.map(component => component.brand).filter(brand => typeof brand === "string" && brand.trim() !== ""))
+  );
 
-  // Filter components based on search term, category, and brand
   const filteredComponents = components.filter(component => {
-    const matchesSearch = component.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          component.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          component.model.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesCategory = selectedCategory ? component.categoryId === selectedCategory : true;
-    
-    const matchesBrand = selectedBrand ? component.brand === selectedBrand : true;
-    
+    const matchesSearch =
+      component.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      component.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      component.model.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesCategory = selectedCategory !== "all" ? component.categoryId === selectedCategory : true;
+    const matchesBrand = selectedBrand !== "all" ? component.brand === selectedBrand : true;
+
     return matchesSearch && matchesCategory && matchesBrand;
   });
 
@@ -41,9 +40,7 @@ const Components = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Components</h1>
-          <p className="text-muted-foreground">
-            Manage hardware components in the catalog
-          </p>
+          <p className="text-muted-foreground">Manage hardware components in the catalog</p>
         </div>
         <Button className="bg-tech-300 hover:bg-tech-400">
           <Plus className="mr-2 h-4 w-4" />
@@ -73,6 +70,7 @@ const Components = () => {
                 />
               </div>
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
@@ -80,15 +78,18 @@ const Components = () => {
                   <SelectValue placeholder="All Categories" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Categories</SelectItem>
-                  {categories.map((category) => (
-                    <SelectItem key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {categories
+                    .filter(cat => typeof cat.id === "string" && cat.id.trim() !== "")
+                    .map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="brand">Brand</Label>
               <Select value={selectedBrand} onValueChange={setSelectedBrand}>
@@ -96,7 +97,7 @@ const Components = () => {
                   <SelectValue placeholder="All Brands" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Brands</SelectItem>
+                  <SelectItem value="all">All Brands</SelectItem>
                   {brands.map((brand) => (
                     <SelectItem key={brand} value={brand}>
                       {brand}
@@ -111,10 +112,10 @@ const Components = () => {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredComponents.map((component) => (
-          <ComponentCard 
-            key={component.id} 
-            component={component} 
-            categoryName={getCategoryName(component.categoryId)} 
+          <ComponentCard
+            key={component.id}
+            component={component}
+            categoryName={getCategoryName(component.categoryId)}
           />
         ))}
       </div>
@@ -132,10 +133,10 @@ const ComponentCard = ({ component, categoryName }: { component: Component; cate
   return (
     <Card className="overflow-hidden card-hover">
       <div className="component-image">
-        <img 
-          src={component.imageUrl} 
-          alt={component.name} 
-          className="h-full w-full object-contain mix-blend-darken" 
+        <img
+          src={component.imageUrl}
+          alt={component.name}
+          className="h-full w-full object-contain mix-blend-darken"
         />
       </div>
       <CardHeader className="pb-2">
@@ -145,16 +146,17 @@ const ComponentCard = ({ component, categoryName }: { component: Component; cate
         <CardTitle className="text-lg">{component.name}</CardTitle>
       </CardHeader>
       <CardContent className="pb-2">
-        <div className="text-sm text-muted-foreground line-clamp-2">
-          {component.description}
-        </div>
-        <div className="mt-2 text-lg font-bold text-tech-300">
-          ${component.price.toFixed(2)}
-        </div>
+        <div className="text-sm text-muted-foreground line-clamp-2">{component.description}</div>
+        <div className="mt-2 text-lg font-bold text-tech-300">${component.price.toFixed(2)}</div>
       </CardContent>
       <CardFooter className="flex gap-2">
-        <Button variant="outline" className="flex-1">Edit</Button>
-        <Button variant="outline" className="flex-1 bg-tech-300/10 text-tech-300 hover:bg-tech-300/20 hover:text-tech-400 border-tech-300/20">
+        <Button variant="outline" className="flex-1">
+          Edit
+        </Button>
+        <Button
+          variant="outline"
+          className="flex-1 bg-tech-300/10 text-tech-300 hover:bg-tech-300/20 hover:text-tech-400 border-tech-300/20"
+        >
           View Details
         </Button>
       </CardFooter>

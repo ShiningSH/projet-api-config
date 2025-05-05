@@ -1,9 +1,13 @@
 import mongoose from 'mongoose';
 
 const componentSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: true,
+    unique: true
+  },
   categoryId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
+    type: String, // ⬅️ Corrigé ici pour correspondre à "cat1", "cat2", etc.
     required: true
   },
   name: {
